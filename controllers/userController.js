@@ -55,7 +55,7 @@ module.exports = {
           return res.status(404).json({ message: 'No user with that ID' });
         }
   
-        const thought = await thought.deleteMany({
+        await Thought.deleteMany({
             _id: {
                 $in: user.thoughts
             }
