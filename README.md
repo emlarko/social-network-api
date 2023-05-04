@@ -6,7 +6,6 @@ The aim of this project was to build an API for a social network application usi
 
 ## Table of Contents
 
-- [Description](#description)
 - [Technology](#technology)
 - [Installation](#installation)
 - [Usage](#bracket-expressions)
@@ -49,3 +48,5 @@ When using the API POST and PUT routes in Insomnia, the user is able to successf
 When using the DELETE route, the user is able to delete a User or a Thought, as well as a friend or a reaction. When a User is deleted, their associated Thoughts are also deleted. 
 
 ### Walkthrough Video
+
+[Social Network API.webm](https://user-images.githubusercontent.com/101362057/236234761-fc9adac2-4248-49c6-8a52-784fbaaf9254.webm)
