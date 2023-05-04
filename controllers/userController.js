@@ -1,4 +1,3 @@
-const { ObjectId } = require('mongoose').Types;
 const { User, Thought } = require("../models");
 
 module.exports = {
@@ -7,11 +6,7 @@ module.exports = {
       try {
         const users = await User.find();
   
-        const userObj = {
-          users,
-        };
-  
-        res.json(userObj);
+        res.json(users);
       } catch (err) {
         console.log(err);
         return res.status(500).json(err);
@@ -25,12 +20,10 @@ module.exports = {
   
         if (!user) {
           return res.status(404).json({ message: 'No user with that ID' })
-        }
+        };
   
         res.json({
           user,
-          thoughts: await thoughts(req.params.studentId),
-          friends: await friends(req.params.studentId),
         });
       } catch (err) {
         console.log(err);
@@ -46,6 +39,23 @@ module.exports = {
         res.status(500).json(err);
       }
     },
+    async updateUser(req, res) {
+      try {
+        const user = await User.findOneAndUpdate(
+          { _id: req.params.userId },
+          { $set: req.body },
+          { runValidators: true, new: true }
+        );
+  
+        if (!user) {
+          res.status(404).json({ message: 'No user with that ID' });
+        }
+  
+        res.json(user);
+      } catch (err) {
+        res.status(500).json(err);
+      }
+    },
     // Delete a user and remove thoughts
     async deleteUser(req, res) {
       try {
@@ -55,13 +65,13 @@ module.exports = {
           return res.status(404).json({ message: 'No user with that ID' });
         }
   
-        await Thought.deleteMany({
+        const thought = await Thought.deleteMany({
             _id: {
                 $in: user.thoughts
             }
         });
   
-        if (!course) {
+        if (!thought) {
           return res.status(404).json({
             message: 'User deleted, but no thoughts found',
           });
@@ -82,7 +92,7 @@ module.exports = {
       try {
         const user = await User.findOneAndUpdate(
           { _id: req.params.userId },
-          { $addToSet: { friends: req.params.friendsId } },
+          { $addToSet: { friends: req.body.friendId } },
           { runValidators: true, new: true }
         );
   
@@ -102,7 +112,7 @@ module.exports = {
       try {
         const user = await User.findOneAndUpdate(
           { _id: req.params.userId },
-          { $pull: { friends: { friendsId: req.params.friendsId } } },
+          { $pull: { friends: req.body.friendId } },
           { runValidators: true, new: true }
         );
   
